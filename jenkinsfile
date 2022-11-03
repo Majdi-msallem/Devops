@@ -5,7 +5,7 @@ pipeline{
         maven "M2_HOME" 
         }
         environment {
-    registry = "majdimsallem/Devops"
+    registry = "majdimsallem/devops"
         registryCredential='dockerhub_id'
         dockerImage=''
          NEXUS_VERSION = "nexus3"
