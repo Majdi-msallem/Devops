@@ -22,7 +22,7 @@ pipeline{
                     url : 'https://github.com/Majdi-msallem/Devops.git'
                 }
             }
-       
+         
        
         }
 }
