@@ -23,7 +23,7 @@ pipeline{
                 }
             }
 
-
+/*
             stage('git clone') {
             steps {
                git branch: 'master', 
@@ -43,8 +43,9 @@ stage("Maven Build") {
                     sh "mvn package -DskipTests=true"
                 }
             }
-        }
+        } */
 
+        /*
          stage('Building our image') { 
             steps { 
                 script { 
@@ -60,14 +61,14 @@ stage("Maven Build") {
                     }
                 } 
             }
-        } 
+        } */
    
        
-       /* stage('Cleaning up') { 
+        stage('Cleaning up') { 
             steps { 
-                sh "docker rmi $registry:$BUILD_NUMBER" 
+                sh "docker rmi $registry:$BUILD_NUMBER-1" 
             }
-        } */
+        } 
          
        
         }
