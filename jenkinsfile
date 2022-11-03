@@ -22,6 +22,21 @@ pipeline{
                     url : 'https://github.com/Majdi-msallem/Devops.git'
                 }
             }
+
+
+            stage('git clone') {
+            steps {
+               git branch: 'master', 
+               url: 'https://github.com/Majdi-msallem/Devops.git'
+        
+            }
+        }
+        
+       stage('MVN CLEAN INSTALL'){
+            steps {
+                sh 'mvn clean install'
+            }
+        }
          
        
         }
