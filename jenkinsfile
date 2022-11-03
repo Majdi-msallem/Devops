@@ -23,7 +23,18 @@ pipeline{
                 }
             }
 
-/*
+
+        
+       stage('MVN CLEAN INSTALL'){
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        /*
+
+
+
             stage('git clone') {
             steps {
                git branch: 'master', 
@@ -32,11 +43,6 @@ pipeline{
             }
         }
         
-       stage('MVN CLEAN INSTALL'){
-            steps {
-                sh 'mvn clean install'
-            }
-        }
 stage("Maven Build") {
             steps {
                 script {
