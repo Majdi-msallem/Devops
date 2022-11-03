@@ -37,7 +37,13 @@ pipeline{
                 sh 'mvn clean install'
             }
         }
-
+stage("Maven Build") {
+            steps {
+                script {
+                    sh "mvn package -DskipTests=true"
+                }
+            }
+        }
 
          stage('Building our image') { 
             steps { 
