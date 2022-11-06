@@ -72,7 +72,7 @@ stage("Maven Build") {
        
         stage('Cleaning up') { 
             steps { 
-                sh "docker rmi $registry:185" 
+                sh "docker rmi $registry:$BUILD_NUMBER" 
             }
         } 
          */
