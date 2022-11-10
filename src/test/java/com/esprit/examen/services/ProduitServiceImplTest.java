@@ -1,5 +1,10 @@
 package com.esprit.examen.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.esprit.examen.entities.CategorieProduit;
 import com.esprit.examen.entities.Produit;
 import com.esprit.examen.repositories.ProduitRepository;
 
@@ -21,50 +27,69 @@ import lombok.extern.slf4j.Slf4j;
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
-@Slf4j
+
 public class ProduitServiceImplTest {
 	
 	@Autowired
-	ProduitRepository pr;
+	ProduitServiceImpl prodServ;
 	
-	Produit p = Produit.builder().codeProduit("cp").prix(30).dateCreation(new Date(2022-10-14)) 
-			.dateDerniereModification(new Date(2022-10-15)).libelleProduit("libp1").build();
+	@Autowired
+	ProduitRepository prodRepo;
+	
+	@Autowired
+	CategorieProduitServiceImpl catServ;
 	
 	@Test
-	@Order(0)
-	public void ajouterProduit() {
-		p= pr.save(p);
-		log.info(p.toString());
-		Assertions.assertNotNull(p.getIdProduit());
+	public void testAddProduit(){
+		CategorieProduit cat=new CategorieProduit("cat1", "cat2"); 
+		CategorieProduit cat1 = catServ.addCategorieProduit(cat);
+		Produit pr=new Produit("Prod1", "Prod2");
+		pr.setCategorieProduit(cat1);
+		Produit p = prodServ.addProduit(pr);
+		assertNotNull(p.getIdProduit());
+		assertTrue(p.getCodeProduit().length() > 0);
 	}
 
+	@Test
+	public void testRetrieveAllProduits() {
+				
+		List<Produit> produits = prodServ.retrieveAllProduits();
+		int expected = produits.size();
+		Produit pr=new Produit("Prod1", "Prod2");
+		Produit p = prodServ.addProduit(pr);
+		assertEquals(expected + 1, prodServ.retrieveAllProduits().size());
+		prodServ.deleteProduit(p.getIdProduit());;
+	}
 	
 	@Test
-	@Order(1)
-	public void modifierProduit() {
-		p.setCodeProduit("cp1Up");
-		p.setDateDerniereModification(new Date(2022-10-21));
-		p.setLibelleProduit("libp1Up");
-		p.setPrix(21);
-		p= pr.save(p);
-		log.info(p.toString());
+	public void testDeleteProduit() {
+		Produit pr=new Produit("Prod1", "Prod2");
+		Produit p = prodServ.addProduit(pr);
+		prodServ.deleteProduit(p.getIdProduit());
+		assertNull(prodServ.retrieveProduit(p.getIdProduit()));
+	};
+	
+
+	@Test
+	public void testRetrieveProduit()
+	{
+		Produit pr=new Produit("Prod1", "Prod2");
+		Produit p = prodServ.addProduit(pr);
+		Produit produit = prodServ.retrieveProduit(p.getIdProduit());
+		assertEquals(p.getIdProduit().longValue(),produit.getIdProduit().longValue());
 		
 	}
 	
 	@Test
-	@Order(2)
-	public void ListProduit() {
-		List<Produit> list=pr.findAll();
-		log.info(list.size()+"");
-		Assertions.assertTrue(list.size()>0);
-	}
-	
-	@Test
-	@Order(3)
-	public void DeleteProduit() {
-		log.info("Produit"+p);
-		log.info("ID de Produit a supprime"+ p.getIdProduit());
-		pr.delete(p);
+	public void testUpdateProduit()
+	{
+		Produit pr=new Produit("Prod1", "Prod2");
+		Produit p1 = prodServ.addProduit(pr);
+		Produit p = prodServ.retrieveProduit(p1.getIdProduit());
+		p.setCodeProduit("test");
+		p.setLibelleProduit("tst");
+		Produit updatedProduit=prodServ.updateProduit(p);
+		assertEquals(p.getLibelleProduit(),updatedProduit.getLibelleProduit());
 	}
 	
 	

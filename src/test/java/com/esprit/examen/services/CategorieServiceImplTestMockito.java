@@ -1,13 +1,15 @@
 package com.esprit.examen.services;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,63 +20,59 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.esprit.examen.entities.CategorieProduit;
-import com.esprit.examen.entities.Produit;
 import com.esprit.examen.repositories.CategorieProduitRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class CategorieServiceImplTestMockito {
-   
-	@Mock
-	CategorieProduitRepository CatRepo;
-	
-	@InjectMocks
-	CategorieProduitServiceImpl CatSer;
-	
-	List<Produit> listp = new ArrayList<Produit>() {
-		{
-		add(Produit.builder().codeProduit("20P").libelleProduit("libP205").prix(56)
-		.dateCreation(new Date(2022-10-12)).dateDerniereModification(new Date(2022-10-11))
-		.build());
-		}
-	};
-	
-	Produit p = Produit.builder().codeProduit("20P").libelleProduit("libP205").prix(56)
-			.dateCreation(new Date(2022-10-12)).dateDerniereModification(new Date(2022-10-11))
-			.build();
-	CategorieProduit C = CategorieProduit.builder().codeCategorie("Code552")
-			.libelleCategorie("libelle1112").produits((Set<Produit>) listp).build();
-	
-	@Test
-	public void getCategorie() {
-		Mockito.when(CatRepo.findById(Mockito.anyLong())).thenReturn(Optional.of(C));
-		CategorieProduit cat = CatSer.retrieveCategorieProduit((long)1);
-		assertNotNull(cat);
-		log.info("get==>"+cat.toString());
-		verify(CatRepo).findById(Mockito.anyLong());
-	}
-	
-	@Test
-	public void addCategorieProduit() {
-		Mockito.when(CatRepo.save(Mockito.any(CategorieProduit.class))).then(invocation->{
-			CategorieProduit cat =invocation.getArgument(0,CategorieProduit.class);
-			cat.setIdCategorieProduit(1L);
-			cat.setCodeCategorie("cod1");
-			cat.setLibelleCategorie("lib1");
-			return cat;
-		});
-	}
-	
-	@Test
-	public void getAllCategories () {
-		Mockito.when(CatRepo.findAll()).thenReturn((List<CategorieProduit>) C);
-		List<CategorieProduit> cp =CatSer.retrieveAllCategorieProduits();
-		assertNotNull(cp);
-		for (CategorieProduit categorie : cp) {
-			log.info(categorie.toString());
-		}
-	}
+	 @Mock CategorieProduitRepository catRepo ;
+	  
+	  
+	  @InjectMocks CategorieProduitServiceImpl is;
+	  
+	  CategorieProduit cat = new CategorieProduit("CODE","LIBELLE");
+	  
+	  List<CategorieProduit> list = new ArrayList<CategorieProduit> () { { add(new
+	  CategorieProduit("Code","Libelle")); add(new
+	  CategorieProduit("Code","Libelle"));
+	  
+	  } };
+	  
+	  @Test public void testRetrieveAllCategorieProduits() {
+	  Mockito.when(catRepo.findAll()).thenReturn(list); assertEquals(list.size(),
+	  is.retrieveAllCategorieProduits().size()); }
+	  
+	  
+	  @Test public void testAddCategorieProduit() { CategorieProduit cat = new
+	  CategorieProduit("CODE","LIBELLE");
+	  Mockito.when(catRepo.save(any(CategorieProduit.class))).thenReturn(cat);
+	  CategorieProduit catP = is.addCategorieProduit(cat); assertNotNull(catP);
+	  
+	  }
+	 
+	  @Test public void testRetrieveCategorieProduit() {
+	 
+	  Mockito.when(catRepo.findById(Mockito.anyLong())).thenReturn(Optional.of(cat)
+	  ); CategorieProduit cat = is.retrieveCategorieProduit(2L);
+	 assertNotNull(cat);
+	  
+	  }
+	  
+	  @Test public void testUpdateCategorieProduit() { CategorieProduit cat = new
+	  CategorieProduit("CODE","LIBELLE");
+	  Mockito.when(catRepo.save(any(CategorieProduit.class))).thenReturn(cat);
+	  cat.setCodeCategorie("CodeUpdated");
+	  cat.setLibelleCategorie("LibelleUpdated"); CategorieProduit catUpdated =
+	  is.updateCategorieProduit(cat); assertNotNull(catUpdated);
+	  assertEquals(cat.getLibelleCategorie(),catUpdated.getLibelleCategorie());
+	  
+	  }
+	  
+	  @Test public void testDeleteCategorieProduit() { CategorieProduit cat = new
+	  CategorieProduit("CODE","LIBELLE"); cat.setIdCategorieProduit(1L);
+	  doNothing().when(catRepo).deleteById(Mockito.anyLong());
+	  is.deleteCategorieProduit(1L);
+	  verify(catRepo,times(1)).deleteById(cat.getIdCategorieProduit()); }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.esprit.examen.entities.Produit;
+import com.esprit.examen.entities.ProduitRequest;
 import com.esprit.examen.services.IProduitService;
 
 import io.swagger.annotations.Api;
@@ -18,12 +19,7 @@ public class ProduitRestController {
 	@Autowired
 	IProduitService produitService;
 	
-	@GetMapping("/hello")
-	@ResponseBody
-	public String hello () {
-		return "hello";
 	
-	}
 
 	@GetMapping("/retrieve-all-produits")
 	@ResponseBody
@@ -40,9 +36,11 @@ public class ProduitRestController {
 
 	@PostMapping("/add-produit")
 	@ResponseBody
-	public Produit addProduit(@RequestBody Produit p) {
-		
-		return produitService.addProduit(p);
+	public Produit addProduit(@RequestBody ProduitRequest p) {
+		Produit prod = new Produit ();
+		prod.setCodeProduit(p.getCodeProduit());
+		prod.setLibelleProduit(p.getLibelleProduit());
+		return produitService.addProduit(prod);
 	}
 
 	@DeleteMapping("/remove-produit/{produit-id}")
@@ -53,8 +51,11 @@ public class ProduitRestController {
 
 	@PutMapping("/modify-produit")
 	@ResponseBody
-	public Produit modifyProduit(@RequestBody Produit p) {
-		return produitService.updateProduit(p);
+	public Produit modifyProduit(@RequestBody ProduitRequest p) {
+		Produit prod = new Produit ();
+		prod.setCodeProduit(p.getCodeProduit());
+		prod.setLibelleProduit(p.getLibelleProduit());
+		return produitService.updateProduit(prod);
 	}
 
 
