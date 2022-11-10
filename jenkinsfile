@@ -40,6 +40,13 @@ pipeline{
                 sh 'mvn test'
                 }
             }
+
+
+              stage ('Docker-compose'){
+            steps{
+                sh 'docker-compose up'
+                }
+            }
         
 /*
 stage("Maven Build") {
