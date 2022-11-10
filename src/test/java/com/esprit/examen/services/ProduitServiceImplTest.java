@@ -5,13 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +19,6 @@ import com.esprit.examen.entities.CategorieProduit;
 import com.esprit.examen.entities.Produit;
 import com.esprit.examen.repositories.ProduitRepository;
 
-import lombok.extern.slf4j.Slf4j;
 
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

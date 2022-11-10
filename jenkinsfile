@@ -37,17 +37,9 @@ pipeline{
         }
            stage ('JUnit / Mockito Test'){
             steps{
-                script
-                {
-                    if (isUnix())
-                    {
-                        sh 'mvn --batch-mode test'
-                    }
-                    else
-                    {
-                        bat 'mvn --batch-mode test'
-                    }
-                } } }
+                sh 'mvn test'
+                }
+            }
         
 /*
 stage("Maven Build") {
