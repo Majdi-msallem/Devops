@@ -30,6 +30,13 @@ pipeline{
                url: 'https://github.com/Majdi-msallem/Devops.git'
             }
         }
+        stage ('JUnit / Mockito Test'){
+            steps{
+                sh 'mvn test'
+                }
+            }
+
+        /*
  stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
