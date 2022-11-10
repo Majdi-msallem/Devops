@@ -22,36 +22,43 @@ pipeline{
                     url : 'https://github.com/Majdi-msallem/Devops.git'
                 }
             }
-
-
-        
-       stage('MVN CLEAN INSTALL'){
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-
-        /*
-
-
+           
 
             stage('git clone') {
             steps {
                git branch: 'master', 
                url: 'https://github.com/Majdi-msallem/Devops.git'
-        
             }
         }
-
+          stage('MVN CLEAN INSTALL'){
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+        }
+           stage ('JUnit / Mockito Test'){
+            steps{
+                script
+                {
+                    if (isUnix())
+                    {
+                        sh 'mvn --batch-mode test'
+                    }
+                    else
+                    {
+                        bat 'mvn --batch-mode test'
+                    }
+                } } }
+        
+/*
 stage("Maven Build") {
             steps {
                 script {
                     sh "mvn package -DskipTests=true"
                 }
             }
-        } */
+        } 
 
-        /*
+        
          stage('Building our image') { 
             steps { 
                 script { 
@@ -75,8 +82,8 @@ stage("Maven Build") {
                 sh "docker rmi $registry:$BUILD_NUMBER" 
             }
         } 
-         */
-   /*    
+         
+       
  stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
@@ -86,7 +93,8 @@ stage("Maven Build") {
         sh "mvn sonar:sonar"
     }
         }
-        } */
+        } 
+        
         
                 stage("Publish to Nexus Repository Manager") {
             steps {
@@ -123,16 +131,6 @@ stage("Maven Build") {
                 }
             }
         }       
-
-
-
-
-
-
-
-
-
-
         
          stage('Building our image') { 
             steps { 
@@ -156,20 +154,7 @@ stage("Maven Build") {
             steps { 
                 sh "docker rmi $registry:$BUILD_NUMBER" 
             }
-        } 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        } */
 
 
          /*  stage('MVN Nexus'){
@@ -179,4 +164,15 @@ stage("Maven Build") {
         } */
 
         }
+        /*
+        
+     post {
+        success {
+            emailext  body: 'Le pipeline que vous venez de lancer est achevé avec succé', recipientProviders: [buildUser()], subject: 'Build réussi', to: 'yasmine.manita@esprit.tn'
+        }
+        failure{
+            emailext attachLog: true, body: 'Le pipeline que vous vener de lancez est achevé avec failure', recipientProviders: [buildUser()], subject: 'Build failed', to: 'yasmine.manita@esprit.tn'
+        }
+    }
+    */
 } 
