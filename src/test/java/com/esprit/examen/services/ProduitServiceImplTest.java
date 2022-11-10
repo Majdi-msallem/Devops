@@ -21,9 +21,7 @@ import com.esprit.examen.repositories.ProduitRepository;
 
 
 @ExtendWith(SpringExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
-
 public class ProduitServiceImplTest {
 	
 	@Autowired

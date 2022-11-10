@@ -8,5 +8,7 @@
   
   @SpringBootTest public class TpAchatProjectApplicationTests {
   
-  @Test void contextLoads() { int k = 4; assertEquals(4, k); } }
+  @Test void contextLoads() { 
+	  int k = 4; assertEquals(4, k);
+	  } }
  

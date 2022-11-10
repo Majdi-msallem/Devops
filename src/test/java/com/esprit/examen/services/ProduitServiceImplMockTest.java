@@ -25,7 +25,7 @@ import com.esprit.examen.repositories.ProduitRepository;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class ProduitServiceImplMock {
+public class ProduitServiceImplMockTest {
 
 	
 	@Mock
