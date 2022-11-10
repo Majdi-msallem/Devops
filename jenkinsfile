@@ -30,6 +30,11 @@ pipeline{
                url: 'https://github.com/Majdi-msallem/Devops.git'
             }
         }
+          stage('MVN CLEAN INSTALL'){
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+        }
         stage ('JUnit / Mockito Test'){
             steps{
                 sh 'mvn test'
