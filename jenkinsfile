@@ -30,55 +30,6 @@ pipeline{
                url: 'https://github.com/Majdi-msallem/Devops.git'
             }
         }
-          stage('MVN CLEAN INSTALL'){
-            steps {
-                sh 'mvn clean install -DskipTests'
-            }
-        }
-           stage ('JUnit / Mockito Test'){
-            steps{
-                sh 'mvn test'
-                }
-            }
-
-
-              
-        
-/*
-stage("Maven Build") {
-            steps {
-                script {
-                    sh "mvn package -DskipTests=true"
-                }
-            }
-        } 
-
-        
-         stage('Building our image') { 
-            steps { 
-                script { 
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
-                }
-            } 
-        }
-       stage('Deploy our image') { 
-            steps { 
-                script { 
-                    docker.withRegistry( '', registryCredential ) { 
-                        dockerImage.push() 
-                    }
-                } 
-            }
-        } 
-   
-       
-        stage('Cleaning up') { 
-            steps { 
-                sh "docker rmi $registry:$BUILD_NUMBER" 
-            }
-        } 
-         
-       
  stage('SonarQube analysis') {
 //    def scannerHome = tool 'SonarScanner 4.0';
         steps{
@@ -89,9 +40,8 @@ stage("Maven Build") {
     }
         }
         } 
-        
-        
-                stage("Publish to Nexus Repository Manager") {
+
+ stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
                     pom = readMavenPom file: "pom.xml";
@@ -126,6 +76,70 @@ stage("Maven Build") {
                 }
             }
         }       
+
+
+
+
+
+
+          stage('MVN CLEAN INSTALL'){
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+        }
+           stage ('JUnit / Mockito Test'){
+            steps{
+                sh 'mvn test'
+                }
+            }
+
+
+              
+        
+
+stage("Maven Build") {
+            steps {
+                script {
+                    sh "mvn package -DskipTests=true"
+                }
+            }
+        } 
+
+        
+         stage('Building our image') { 
+            steps { 
+                script { 
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+                }
+            } 
+        }
+       stage('Deploy our image') { 
+            steps { 
+                script { 
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+                    }
+                } 
+            }
+        } 
+   
+       
+        stage('Cleaning up') { 
+            steps { 
+                sh "docker rmi $registry:$BUILD_NUMBER" 
+            }
+        } 
+         
+         stage('Email notification') {
+            steps {
+                mail bcc: '', body: 'All containers are up', cc: '', from: '', replyTo: '', subject: 'Jenkins-Dockerhub Alert', to: 'majdi.msallem@esprit.tn'
+            }
+        }
+       
+
+        
+        
+       /*        
         
          stage('Building our image') { 
             steps { 
@@ -156,7 +170,7 @@ stage("Maven Build") {
             steps {
                 sh 'mvn deploy -e -X -DskipTests=true'
             }
-        } */
+        } 
 
         }
         /*
