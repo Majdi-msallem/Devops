@@ -35,6 +35,11 @@ pipeline{
                 sh 'mvn clean install -DskipTests'
             }
         }
+        stage ('JUnit / Mockito Test'){
+            steps{
+                sh 'mvn test'
+                }
+            }
         
 
         /*
