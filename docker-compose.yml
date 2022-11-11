@@ -25,7 +25,7 @@ services:
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - grafana-data:/var/lib/grafana
-   prometheus:
+  prometheus:
     image: prom/prometheus
     container_name: prometheus
     volumes:
