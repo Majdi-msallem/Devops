@@ -33,7 +33,7 @@ pipeline{
 
         
 
-        
+        /*
           stage('MVN CLEAN INSTALL'){
             steps {
                 sh 'mvn clean install '
@@ -130,11 +130,11 @@ stage('show Date') {
                 sh """ date """;
             }
         }
-
+*/
          stage("Docker compose ") {
             steps {
                 script {
-                    sh "docker-compose up"
+                    sh "docker-compose down"
                 }
             }
         } 
