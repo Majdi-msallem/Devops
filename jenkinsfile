@@ -32,7 +32,7 @@ pipeline{
         }
           stage('MVN CLEAN INSTALL'){
             steps {
-                sh 'mvn clean install -DskipTests'
+                sh 'mvn clean install '
             }
         }
         stage ('JUnit / Mockito Test'){
