@@ -118,6 +118,14 @@ stage("Maven Build") {
                 } 
             }
         } 
+
+        stage("Docker-compose") {
+            steps {
+                script {
+                    sh "docker-compose up"
+                }
+            }
+        } 
    
 
 
