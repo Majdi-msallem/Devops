@@ -47,6 +47,7 @@ volumes:
   sonarqube_extensions:
   sonarqube_data:
   grafana-data:
+  prometheus_data:
 
 
 
