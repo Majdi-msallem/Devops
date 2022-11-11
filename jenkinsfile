@@ -23,7 +23,7 @@ pipeline{
                 }
             }
          
-
+/*
             stage('git clone') {
             steps {
                git branch: 'master', 
@@ -119,7 +119,7 @@ stage("Maven Build") {
             }
         } 
 
-        
+        */
    stage("Docker compose ") {
             steps {
                 script {
