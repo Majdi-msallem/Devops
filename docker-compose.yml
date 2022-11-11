@@ -14,11 +14,7 @@ services:
   app:
     depends_on:
       - mysqldb
-<<<<<<< HEAD
-    image: tpachatproject:latest
-=======
     image: majdimsallem/devopsmajdi
->>>>>>> ee435b9b31d9959d15f6ad57a3133ba3a2984d07
     container_name: springboot-app
     restart: on-failure
     env_file: ./.env
