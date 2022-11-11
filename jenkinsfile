@@ -23,13 +23,23 @@ pipeline{
                 }
             }
          
-/*
+
             stage('git clone') {
             steps {
                git branch: 'master', 
                url: 'https://github.com/Majdi-msallem/Devops.git'
             }
         }
+
+         stage("Docker compose ") {
+            steps {
+                script {
+                    sh "docker-compose"
+                }
+            }
+        } 
+
+        /*
           stage('MVN CLEAN INSTALL'){
             steps {
                 sh 'mvn clean install '
@@ -119,18 +129,12 @@ stage("Maven Build") {
             }
         } 
 
-        */
-   stage("Docker compose ") {
-            steps {
-                script {
-                    sh "docker-compose up"
-                }
-            }
-        } 
+        
+  
 
 
 
-/*
+
 stage("Maven Build") {
             steps {
                 script {
