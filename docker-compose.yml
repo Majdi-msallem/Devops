@@ -2,7 +2,6 @@ version: "3"
 
 services:
   nexus:
-    container_name: nexus
     image: sonatype/nexus3
     volumes:
       - "nexus-data:/nexus-data"
@@ -20,8 +19,7 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - 3000:3000
-    restart: unless-stopped
+      - "3000:3000"
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - grafana-data:/var/lib/grafana
