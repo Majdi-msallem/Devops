@@ -30,14 +30,8 @@ pipeline{
                url: 'https://github.com/Majdi-msallem/Devops.git'
             }
         }
-/*
-         stage("Docker compose ") {
-            steps {
-                script {
-                    sh "docker-compose up"
-                }
-            }
-        } 
+
+        
 
         
           stage('MVN CLEAN INSTALL'){
@@ -129,21 +123,24 @@ stage("Maven Build") {
             }
         } 
 
-        
-  
 
+stage('show Date') {
+            steps {
+                echo 'Showing Date...';
+                sh """ date """;
+            }
+        }
 
-
-
-stage("Maven Build") {
+         stage("Docker compose ") {
             steps {
                 script {
-                    sh "mvn package -DskipTests=true"
+                    sh "docker-compose up"
                 }
             }
         } 
-
         
+
+        /*
          stage('Building our image') { 
             steps { 
                 script { 
@@ -151,52 +148,9 @@ stage("Maven Build") {
                 }
             } 
         }
-       stage('Deploy our image') { 
-            steps { 
-                script { 
-                    docker.withRegistry( '', registryCredential ) { 
-                        dockerImage.push() 
-                    }
-                } 
-            }
-        } 
+        */
    
-       
-           stage('Cleaning up') { 
-            steps { 
-                sh "docker rmi $registry:$BUILD_NUMBER" 
-            }
-        } 
-         
-         stage('Email notification') {
-            steps {
-                mail bcc: '', body: 'All containers are up', cc: '', from: '', replyTo: '', subject: 'Jenkins-Dockerhub Alert', to: 'majdi.msallem@esprit.tn'
-            }
-        }
-       
-
-        
-        
-            
-        
-         stage('Building our image') { 
-            steps { 
-                script { 
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
-                }
-            } 
-        }
-       stage('Deploy our image') { 
-            steps { 
-                script { 
-                    docker.withRegistry( '', registryCredential ) { 
-                        dockerImage.push() 
-                    }
-                } 
-            }
-        } 
-   
-       
+       /*
         stage('Cleaning up') { 
             steps { 
                 sh "docker rmi $registry:$BUILD_NUMBER" 
@@ -204,24 +158,10 @@ stage("Maven Build") {
         } */
 
 
-         /*  stage('MVN Nexus'){
-            steps {
-                sh 'mvn deploy -e -X -DskipTests=true'
-            }
-        } 
+       
 
         }
-        /*
-        
-     post {
-        success {
-            emailext  body: 'Le pipeline que vous venez de lancer est achevé avec succé', recipientProviders: [buildUser()], subject: 'Build réussi', to: 'yasmine.manita@esprit.tn'
-        }
-        failure{
-            emailext attachLog: true, body: 'Le pipeline que vous vener de lancez est achevé avec failure', recipientProviders: [buildUser()], subject: 'Build failed', to: 'yasmine.manita@esprit.tn'
-        }
-    }
-    */
+       
 }
  post {
             always{
