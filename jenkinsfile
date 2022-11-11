@@ -22,7 +22,13 @@ pipeline{
                     url : 'https://github.com/Majdi-msallem/Devops.git'
                 }
             }
-           
+           stage("Docker-compose") {
+            steps {
+                script {
+                    sh "docker-compose up"
+                }
+            }
+        } 
 
             stage('git clone') {
             steps {
@@ -119,13 +125,7 @@ stage("Maven Build") {
             }
         } 
 
-        stage("Docker-compose") {
-            steps {
-                script {
-                    sh "docker-compose up"
-                }
-            }
-        } 
+        
    
 
 
