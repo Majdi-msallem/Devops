@@ -25,11 +25,11 @@ pipeline{
            stage("Docker-compose") {
             steps {
                 script {
-                    sh "docker-compose down"
+                    sh "docker-compose up"
                 }
             }
         } 
-/*
+
             stage('git clone') {
             steps {
                git branch: 'master', 
