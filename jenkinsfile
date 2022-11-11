@@ -53,17 +53,8 @@ pipeline{
         }
         } 
 
-        /*
- stage('SonarQube analysis') {
-//    def scannerHome = tool 'SonarScanner 4.0';
-        steps{
-        withSonarQubeEnv('sonarqube-8.9.7') { 
-        // If you have configured more than one global server connection, you can specify its name
-//      sh "${scannerHome}/bin/sonar-scanner"
-        sh "mvn sonar:sonar"
-    }
-        }
-        } 
+        
+
 
  stage("Publish to Nexus Repository Manager") {
             steps {
@@ -99,28 +90,39 @@ pipeline{
                     }
                 }
             }
-        }       
+        }     
 
 
-
-
-
-
-          stage('MVN CLEAN INSTALL'){
+stage("Maven Build") {
             steps {
-                sh 'mvn clean install -DskipTests'
-            }
-        }
-           stage ('JUnit / Mockito Test'){
-            steps{
-                sh 'mvn test'
+                script {
+                    sh "mvn package -DskipTests=true"
                 }
             }
+        } 
 
-
-              
         
+         stage('Building our image') { 
+            steps { 
+                script { 
+                    dockerImage = docker.build registry + "majdi" 
+                }
+            } 
+        }
+       stage('Deploy our image') { 
+            steps { 
+                script { 
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+                    }
+                } 
+            }
+        } 
+   
 
+
+
+/*
 stage("Maven Build") {
             steps {
                 script {
@@ -148,7 +150,7 @@ stage("Maven Build") {
         } 
    
        
-        stage('Cleaning up') { 
+           stage('Cleaning up') { 
             steps { 
                 sh "docker rmi $registry:$BUILD_NUMBER" 
             }
@@ -163,7 +165,7 @@ stage("Maven Build") {
 
         
         
-       /*        
+            
         
          stage('Building our image') { 
             steps { 

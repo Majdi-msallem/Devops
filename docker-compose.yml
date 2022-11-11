@@ -1,37 +1,8 @@
 version: "3"
 
 services:
-  mysqldb:
-    image: mysql:5.7
-    restart: unless-stopped
-    env_file: ./.env
-    environment:
-      - MYSQL_DATABASE=$MYSQLDB_DATABASE
-    ports:
-      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
-    volumes:
-      - db:/var/lib/mysql
-  app:
-    depends_on:
-      - mysqldb
-    image: tpachatproject:latest
-    container_name: springboot-app
-    restart: on-failure
-    env_file: ./.env
-    ports:
-      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
-    environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false",
-        "spring.datasource.username" : "$MYSQLDB_USER",
-        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
-        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
-        "spring.jpa.hibernate.ddl-auto" : "update"
-      }'
-    volumes:
-      - .m2:/root/.m2
-    stdin_open: true
-    tty: true
+  
+  
   nexus:
     container_name: nexus
     image: sonatype/nexus3
@@ -48,17 +19,37 @@ services:
      - sonarqube_data:/opt/sonarqube/data
      - sonarqube_extensions:/opt/sonarqube/extensions
      - sonarqube_logs:/opt/sonarqube/logs
-  angular-service:
-       container_name: angular
-       build: C:\Users\majdi\Desktop\devops\crud-tuto-front
-       ports:
-           - "4200:80"
-    
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana-data:/var/lib/grafana
+   prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090 
+
 volumes:
   db:
   nexus-data:
   sonarqube_logs:
   sonarqube_extensions:
   sonarqube_data:
+  grafana-data:
+
+
 
 
