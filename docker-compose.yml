@@ -1,39 +1,39 @@
 version: "3"
 
 services:
-  nexus:
-    image: sonatype/nexus3
-    volumes:
-      - "nexus-data:/nexus-data"
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
     ports:
-      - "8081:8081"
-  sonarqube:
-    container_name: sonarqube
-    image: "sonarqube:8.9.7-community"
-    ports:
-      - "9000:9000"
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
-     - sonarqube_data:/opt/sonarqube/data
-     - sonarqube_extensions:/opt/sonarqube/extensions
-     - sonarqube_logs:/opt/sonarqube/logs
-  grafana:
-    image: grafana/grafana
+      - db:/var/lib/mysql
+  app:
+    depends_on:
+      - mysqldb
+    image: tpachatproject:latest
+    container_name: springboot-app
+    restart: on-failure
+    env_file: ./.env
     ports:
-      - "3000:3000"
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
+        "spring.jpa.hibernate.ddl-auto" : "update"
+      }'
     volumes:
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - grafana-data:/var/lib/grafana
- 
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
 
+
+    
 volumes:
   db:
-  nexus-data:
-  sonarqube_logs:
-  sonarqube_extensions:
-  sonarqube_data:
-  grafana-data:
-  
-
-
-
-
